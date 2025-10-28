@@ -15,9 +15,6 @@ NOTE: The UltralyticsDetectorProvider node is not part of the ComfyUI-Impact-Pac
 
 ## How To Install
 
-### **Recommended**
-* Install via [ComfyUI-Manager](https://github.com/ltdrdata/ComfyUI-Manager).
-
 ### **Manual**
 * Navigate to `ComfyUI/custom_nodes` in your terminal (cmd).
 * Clone the repository under the `custom_nodes` directory using the following command:
