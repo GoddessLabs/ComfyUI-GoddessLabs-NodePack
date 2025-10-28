@@ -16,7 +16,6 @@ This node pack helps to conveniently enhance images through Detector, Detailer, 
 * Clone the repository under the `custom_nodes` directory using the following command:
   ```
   git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
-  cd comfyui-impact-pack
   ```
 * Install dependencies in your Python environment.
     * For Windows Portable, run the following command inside `ComfyUI\custom_nodes\comfyui-impact-pack`:
