@@ -1,6 +1,21 @@
 # Patch Notes: GoddessLabs ❤️‍🔥💊  NodePack 
 
-## V0.0.3: The "Visual Style" Update (Final)
+## V0.0.4: The "Force Reload" Update
+**Focus:** Interactivity & Cache Busting
+* **Renaming:**
+    * **File:** Renamed `folder_selector.py` to `folder_browser.py`.
+    * **Title:** Node title changed to **Folder Browser ❤️‍🔥💊 GoddessLabs**.
+* **New Feature:**
+    * **Reload Connected Node ⟳ Button:** Added a button to the Folder Browser node.
+    * **Configuration:** The button is hidden by default. It can be enabled via the **Properties** panel (`show_reload_button`: true).
+    * **Functionality:** Clicking this button finds the connected downstream node (e.g., JOV Video Queue), deletes it, and immediately replaces it with a fresh clone.
+    * **Why:** This solves the issue where nodes with aggressive internal caching wouldn't see new files added to a folder until ComfyUI was fully restarted.
+* **Visuals:**
+    * **Padding:** Reduced default width padding from 15px to **5px** for a cleaner look.
+* **Improvement:**
+    * **Stability:** Optimized the node recreation logic to ensure all wires (inputs and outputs) are preserved during the reload process.
+
+## V0.0.3: The "Visual Style" Update
 **Focus:** Stability & Visual Polish
 * **Visuals:**
     * **Name:** Node is now titled **Folder Selector ❤️‍🔥💊 GoddessLabs**.
