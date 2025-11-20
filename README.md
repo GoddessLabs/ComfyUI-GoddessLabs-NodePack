@@ -6,27 +6,21 @@
 This node pack helps to conveniently enhance images through Detector, Detailer, Upscaler, Pipe, and more.
 
 ## NOTICE 
-* V0.01: Working Prototype
-
+* V0.02: Working Prototype
+* **IMPORTANT:** The `Folder Selector` node uses native Windows dialogs. It will **only work** if you are running ComfyUI on a local Windows machine. It will not work on Colab, RunPod, or Linux servers.
 
 ## How To Install
 
 ### **Manual**
 * Navigate to `ComfyUI/custom_nodes` in your terminal (cmd).
-* Clone the repository under the `custom_nodes` directory using the following command:
-  ```
-  git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
-  ```
+* Clone the repository under the `custom_nodes` directory using the following command: git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
+
 * Install dependencies in your Python environment.
-    * For Windows Portable, run the following command inside `ComfyUI\custom_nodes\comfyui-impact-pack`:
-        ```
-        ..\..\..\python_embeded\python.exe -m pip install -r requirements.txt
-        ```
-    * If using venv or conda, activate your Python environment first, then run:
-        ```
-        pip install -r requirements.txt
+  * For Windows Portable, run the following command inside `ComfyUI\custom_nodes\ComfyUI-GoddessLabs-NodePack`:
+      ```
+      ..\..\..\python_embeded\python.exe -m pip install -r requirements.txt
+      ```
 
 ## Custom Nodes
-### [Detector nodes](https://github.com/ltdrdata/ComfyUI-extension-tutorials/blob/Main/ComfyUI-Impact-Pack/tutorial/detectors.md)
-  * `SAMLoader (Impact)` - Loads the SAM model.
-
+### Utility
+* **GoddessLabs Folder Selector**: A helper node that opens a native Windows folder picker to easily select paths for batch processing or saving.
