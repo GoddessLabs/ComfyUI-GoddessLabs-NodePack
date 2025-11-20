@@ -13,7 +13,7 @@ async function selectFolder(widget) {
                 current_path: encodeURIComponent(currentPath)
             }
         });
-        
+
         if (resp.status === 200) {
             const data = await resp.json();
             if (data.error) {
@@ -28,6 +28,7 @@ async function selectFolder(widget) {
         }
     } catch (e) {
         console.error(`[GoddessLabs] Error fetching folder path:`, e);
+        alert(`[GoddessLabs] Error: ${e.message || "Unknown error occurred while selecting folder."}`);
     }
 }
 
@@ -56,11 +57,13 @@ function reloadConnectedNode(sourceNode) {
         const newNode = LiteGraph.createNode(oldNode.type);
         newNode.pos = [oldNode.pos[0], oldNode.pos[1]];
         newNode.size = [...oldNode.size];
-        
+
         if (oldNode.properties) newNode.properties = JSON.parse(JSON.stringify(oldNode.properties));
         if (oldNode.color) newNode.color = oldNode.color;
         if (oldNode.bgcolor) newNode.bgcolor = oldNode.bgcolor;
-        
+        // FIX: Copy title to prevent loss
+        if (oldNode.title) newNode.title = oldNode.title;
+
         graph.add(newNode);
 
         if (oldNode.widgets && newNode.widgets) {
@@ -111,7 +114,7 @@ function reloadConnectedNode(sourceNode) {
 function addReloadButton(node) {
     // Prevent duplicates
     if (node.widgets && node.widgets.find(w => w.name === "Reload Connected Node ⟳")) return;
-    
+
     node.addWidget(
         "button",
         "Reload Connected Node ⟳",
@@ -135,13 +138,13 @@ app.registerExtension({
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (nodeData.name === "GoddessLabsFolderSelector") {
             const onNodeCreated = nodeType.prototype.onNodeCreated;
-            
+
             nodeType.prototype.onNodeCreated = function () {
                 onNodeCreated?.apply(this, arguments);
                 const node = this;
-                
-                // Version 0.0.4
-                this.properties["version"] = "0.0.4";
+
+                // Version 0.0.6
+                this.properties["version"] = "0.0.6";
 
                 // --- CONFIG: Reload Button Visibility ---
                 if (this.properties["show_reload_button"] === undefined) {
@@ -151,11 +154,17 @@ app.registerExtension({
                 // --- VISUAL STYLING ---
                 let isRestoring = false;
                 const origConfigure = node.configure;
-                
-                node.configure = function(data) {
-                    isRestoring = true; 
+
+                node.configure = function (data) {
+                    isRestoring = true;
                     if (origConfigure) {
                         origConfigure.apply(this, arguments);
+                    }
+                    // FIX: Apply reload button state after configuration load
+                    if (this.properties["show_reload_button"]) {
+                        addReloadButton(this);
+                    } else {
+                        removeReloadButton(this);
                     }
                 };
 
@@ -170,7 +179,7 @@ app.registerExtension({
                 }, 0);
 
                 const pathWidget = this.widgets.find(w => w.name === "path");
-                
+
                 if (pathWidget) {
                     // Always add Select Folder button
                     this.addWidget(
@@ -189,42 +198,50 @@ app.registerExtension({
 
                 // --- PROPERTY CHANGE LISTENER ---
                 const onPropertyChanged = node.onPropertyChanged;
-                node.onPropertyChanged = function(name, value) {
+                node.onPropertyChanged = function (name, value) {
                     if (onPropertyChanged) {
                         onPropertyChanged.apply(this, arguments);
                     }
-                    
+
                     if (name === "show_reload_button") {
                         if (value === true) {
                             addReloadButton(node);
                         } else {
                             removeReloadButton(node);
                         }
-                        
-                        // Force resize to fit/shrink
-                        if (node.size) {
-                           node.setSize(node.computeSize([node.size[0], node.size[1]]));
-                        }
+
+                        // FIX: Trigger resize only on explicit property change
+                        node.setDirtyCanvas(true, true);
                     }
                 };
 
                 // --- SIZE CALCULATION ---
                 const originalComputeSize = this.computeSize;
-                this.computeSize = function(size) {
+                this.computeSize = function (size) {
                     const newSize = originalComputeSize ? originalComputeSize.apply(this, arguments) : [0, 0];
-                    
-                    // Width Adjustment: +5px (Updated)
-                    newSize[0] += 5; 
 
+                    // Calculate minimum required height based on widgets
                     let requiredHeight = 0;
                     if (this.widgets) {
                         for (const w of this.widgets) {
-                            requiredHeight += (w.computeSize ? w.computeSize(newSize)[1] : 20) + 4; 
+                            // Use a safe default if computeSize is missing
+                            const wHeight = w.computeSize ? w.computeSize(newSize)[1] : 20;
+                            requiredHeight += wHeight + 4; // Add spacing
                         }
                     }
-                    if (newSize[1] < requiredHeight + 30) {
-                        newSize[1] = requiredHeight + 30;
+
+                    // Add padding for header/footer
+                    requiredHeight += 30;
+
+                    // Respect current size if it's larger than required (prevent shrinking)
+                    // But ensure it's at least the required height
+                    newSize[1] = Math.max(newSize[1], requiredHeight);
+
+                    // Also respect the input size if it's larger (user manual resize)
+                    if (size && size[1] > newSize[1]) {
+                        newSize[1] = size[1];
                     }
+
                     return newSize;
                 }
             };

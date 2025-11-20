@@ -6,8 +6,8 @@
 This node pack helps to conveniently enhance images through Detector, Detailer, Upscaler, Pipe, and more.
 
 ## NOTICE 
-* **V0.0.4: Stable Release**
-* **IMPORTANT:** The `Folder Browser` node uses native Windows dialogs. It will **only work** if you are running ComfyUI on a local Windows machine. It will not work on Colab, RunPod, or Linux servers.
+* **V0.0.52: Stable Release**
+* **Cross-Platform:** The `Folder Browser` node now uses `wxPython`, making it compatible with Windows, macOS, and Linux (with GUI).
 
 ## How To Install
 
@@ -26,7 +26,7 @@ git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
 ## Custom Nodes
 ### Utility
 * **Folder Browser ❤️‍🔥💊 GoddessLabs**: 
-    * Opens a native Windows folder picker.
+    * Opens a native folder picker (Cross-Platform).
     * **NEW in V0.0.4:** Includes a `Reload Connected Node ⟳` button. 
         * **Note:** This button is hidden by default. To enable it, right-click the node, select **Properties**, and set `show_reload_button` to `true`.
         * **Function:** It forces downstream nodes (like the **JOV Video Queue**) to fully reload and refresh their file lists without restarting ComfyUI.
