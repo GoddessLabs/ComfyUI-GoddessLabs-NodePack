@@ -1,5 +1,24 @@
 # Patch Notes: GoddessLabs ❤️‍🔥💊  NodePack 
 
+## V0.0.51: The "Visual Polish" Update
+**Focus:** User Interface Refinement
+* **Visuals:**
+    * **Width Padding:** Increased default node width padding from **5px** to **10px** for improved text widget visibility and breathing room.
+
+---
+
+## V0.0.5: The "Cross-Platform" Update
+**Focus:** Platform Compatibility & Dependency Modernization
+* **Core Change:**
+    * **Folder Browser:** The underlying native folder selection logic has been completely replaced.
+    * **Removed:** Windows-specific `ctypes` and `wintypes` APIs.
+    * **Added:** Cross-platform **wxPython** library (`wx.DirDialog`).
+    * **Result:** The `Folder Browser` node is now compatible with Linux (with a GUI environment) and macOS, in addition to Windows.
+* **Dependencies:**
+    * The `__init__.py` dependency check now uses `import wx` to confirm environment readiness.
+
+---
+
 ## V0.0.4: The "Force Reload" Update
 **Focus:** Interactivity & Cache Busting
 * **Renaming:**

@@ -140,8 +140,8 @@ app.registerExtension({
                 onNodeCreated?.apply(this, arguments);
                 const node = this;
                 
-                // Version 0.0.4
-                this.properties["version"] = "0.0.4";
+                // Version 0.0.6
+                this.properties["version"] = "0.0.6";
 
                 // --- CONFIG: Reload Button Visibility ---
                 if (this.properties["show_reload_button"] === undefined) {
@@ -213,8 +213,8 @@ app.registerExtension({
                 this.computeSize = function(size) {
                     const newSize = originalComputeSize ? originalComputeSize.apply(this, arguments) : [0, 0];
                     
-                    // Width Adjustment: +5px (Updated)
-                    newSize[0] += 5; 
+                    // Width Adjustment: +0px (Updated)
+                    newSize[0] += 0; 
 
                     let requiredHeight = 0;
                     if (this.widgets) {
