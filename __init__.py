@@ -35,10 +35,10 @@ def check_and_install_dependencies():
     This function uses a subprocess to run 'pip install -r requirements.txt'.
     """
     try:
-        # Check for a specific package (e.g., 'tk' is used in your requirements.txt)
+        # Check for a specific package (e.g., 'wx' is used in your requirements.txt)
         # If the import succeeds, dependencies are likely satisfied.
         # Note: If your dependency is a sub-module (e.g., 'PIL' for 'Pillow'), check the top-level name.
-        importlib.import_module('tk')
+        importlib.import_module('wx')
         return
     except ImportError:
         # If the import fails, proceed with installation.

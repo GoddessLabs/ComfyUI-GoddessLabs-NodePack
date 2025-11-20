@@ -7,157 +7,78 @@ import os
 import sys
 import logging
 
-# --- Safe Import for Windows logic ---
+# --- Cross-Platform wxPython Import ---
 try:
-    import ctypes
-    from ctypes import wintypes
+    import wx
 
-    IS_WINDOWS = True
-except (ImportError, AttributeError):
-    IS_WINDOWS = False
-
-# --- Constants for Windows API ---
-MAX_PATH = 260
-BIF_RETURNONLYFSDIRS = 0x0001
-BIF_NEWDIALOGSTYLE = 0x0040
-BIF_EDITBOX = 0x0010
-WM_USER = 0x0400
-BFFM_INITIALIZED = 1
-BFFM_SETSELECTIONW = WM_USER + 107
-
-# --- Ctypes Structures and Functions (Windows Only) ---
-if IS_WINDOWS:
-    BrowseCallbackProc = ctypes.WINFUNCTYPE(ctypes.c_int, wintypes.HWND, ctypes.c_uint, ctypes.c_void_p,
-                                            ctypes.c_void_p)
+    IS_WXP_AVAILABLE = True
+except ImportError:
+    IS_WXP_AVAILABLE = False
+    logging.warning("[GoddessLabs] Warning: wxPython is not installed. Folder Browser will not function.")
 
 
-    class BROWSEINFO(ctypes.Structure):
-        _fields_ = [
-            ("hwndOwner", wintypes.HWND),
-            ("pidlRoot", ctypes.c_void_p),
-            ("pszDisplayName", ctypes.c_wchar * MAX_PATH),
-            ("lpszTitle", ctypes.c_wchar_p),
-            ("ulFlags", ctypes.c_uint),
-            ("lpfn", BrowseCallbackProc),
-            ("lParam", ctypes.c_void_p),
-            ("iImage", ctypes.c_int),
-        ]
-
-
-    SHBrowseForFolder = ctypes.windll.shell32.SHBrowseForFolderW
-    SHBrowseForFolder.argtypes = [ctypes.POINTER(BROWSEINFO)]
-    SHBrowseForFolder.restype = ctypes.c_void_p
-
-    SHGetPathFromIDList = ctypes.windll.shell32.SHGetPathFromIDListW
-    SHGetPathFromIDList.argtypes = [ctypes.c_void_p, ctypes.c_wchar_p]
-    SHGetPathFromIDList.restype = wintypes.BOOL
-
-    CoTaskMemFree = ctypes.windll.ole32.CoTaskMemFree
-    CoTaskMemFree.argtypes = [ctypes.c_void_p]
-    CoTaskMemFree.restype = None
-
-    CoInitialize = ctypes.windll.ole32.CoInitialize
-    CoInitialize.argtypes = [ctypes.c_void_p]
-    CoInitialize.restype = ctypes.c_long
-
-    CoUninitialize = ctypes.windll.ole32.CoUninitialize
-    CoUninitialize.argtypes = []
-    CoUninitialize.restype = None
-
-    GetForegroundWindow = ctypes.windll.user32.GetForegroundWindow
-    GetForegroundWindow.restype = wintypes.HWND
-    GetForegroundWindow.argtypes = []
-
-    SendMessageW = ctypes.windll.user32.SendMessageW
-    SendMessageW.argtypes = [wintypes.HWND, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p]
-    SendMessageW.restype = ctypes.c_void_p
-
-    # --- New: Kernel32 for Cache Busting (Short/Long Path) ---
-    GetShortPathNameW = ctypes.windll.kernel32.GetShortPathNameW
-    GetShortPathNameW.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint]
-    GetShortPathNameW.restype = ctypes.c_uint
-
-    GetLongPathNameW = ctypes.windll.kernel32.GetLongPathNameW
-    GetLongPathNameW.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint]
-    GetLongPathNameW.restype = ctypes.c_uint
-
-else:
-    BROWSEINFO = None
-
+# --- Folder Dialog Implementation using wxPython ---
 
 def open_folder_dialog(default_path=""):
-    if not IS_WINDOWS:
-        print("[GoddessLabs] Error: Native folder dialogs are only supported on Windows hosts.")
+    """
+    Opens a native folder selection dialog using wxPython.
+    This function should be executed on the main thread or in a way
+    that allows wxPython to run its event loop (executed via run_in_executor).
+    """
+    if not IS_WXP_AVAILABLE:
+        print("[GoddessLabs] Error: wxPython not available.")
         return None
 
-    @BrowseCallbackProc
-    def browse_callback(hwnd, uMsg, lParam, lpData):
-        if uMsg == BFFM_INITIALIZED:
-            SendMessageW(hwnd, BFFM_SETSELECTIONW, ctypes.c_void_p(1), lpData)
-        return 0
+    # Use a minimal wx.App and wx.Frame to host the dialog
+    # wx.App(False) prevents stdout/stderr redirection
+    app = wx.App(False)
+    # A Frame is needed to host the dialog
+    frame = wx.Frame(None)
 
-    folder_path = ""
-    pidl = None
-    default_path_ptr = ctypes.c_wchar_p(default_path)
+    # Path normalization for default_path
+    if not os.path.isdir(default_path):
+        default_path = ""
+
+    folder_path = None
 
     try:
-        CoInitialize(None)
-        bi = BROWSEINFO()
-        bi.hwndOwner = GetForegroundWindow()
-        bi.pidlRoot = None
-        bi.lpszTitle = "GoddessLabs❤️‍🔥💊 - Select Folder"
-        bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX
-        bi.lpfn = browse_callback
-        bi.lParam = ctypes.cast(default_path_ptr, ctypes.c_void_p)
-        bi.iImage = 0
+        # Use DirDialog to select a folder
+        with wx.DirDialog(
+                frame,
+                "GoddessLabs❤️‍🔥💊 - Select Folder",
+                defaultPath=default_path,
+                style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
+        ) as dlg:
 
-        pidl = SHBrowseForFolder(ctypes.byref(bi))
-        if pidl:
-            path_buffer = ctypes.create_unicode_buffer(MAX_PATH)
-            if SHGetPathFromIDList(pidl, path_buffer):
-                folder_path = path_buffer.value
-                if folder_path and not folder_path.endswith("\\"):
-                    folder_path += "\\"
-            else:
-                display = "".join(bi.pszDisplayName).split("\x00", 1)[0]
-                folder_path = display
+            # The previous Z-ORDER FIX (frame.Show(True) and frame.Raise()) has been removed
+            # as it was causing crashes.
+
+            if dlg.ShowModal() == wx.ID_OK:
+                folder_path = dlg.GetPath()
     except Exception as e:
-        print(f"[GoddessLabs] Error opening folder dialog: {e}")
+        print(f"[GoddessLabs] Error opening wxPython folder dialog: {e}")
+        logging.error(f"[GoddessLabs] Error opening wxPython folder dialog: {e}")
     finally:
-        if pidl:
-            CoTaskMemFree(pidl)
-        CoUninitialize()
+        # Clean up wx resources
+        frame.Destroy()
+        app.ExitMainLoop()
+        # Ensure wx.App instance is cleaned up
+        if app:
+            del app
+
+    # Ensure path ends with the correct OS separator
+    if folder_path and not folder_path.endswith(os.path.sep):
+        folder_path += os.path.sep
 
     return folder_path
 
 
 def toggle_path_format(path):
     """
-    Toggles between Windows Short Path (8.3) and Long Path.
-    This forces downstream nodes to invalidate their cache because the string is lexically different,
-    even though it points to the exact same OS location.
+    Placeholder for the old Windows-specific cache-busting function (Short/Long Path).
+    It now returns the path unchanged, relying on the JS side node-recreation for cache-busting.
     """
-    if not IS_WINDOWS or not path:
-        return path
-
-    buffer = ctypes.create_unicode_buffer(MAX_PATH)
-
-    # 1. Try to get the Long Path first
-    GetLongPathNameW(path, buffer, MAX_PATH)
-    long_path = buffer.value
-
-    # 2. If the input IS the long path, switch to Short Path
-    #    (Comparison is case-insensitive for Windows)
-    if long_path.lower() == path.lower() or path.lower() == (long_path + "\\").lower():
-        # Clean trailing slashes for GetShortPathNameW
-        clean_path = path.rstrip("\\/")
-        if GetShortPathNameW(clean_path, buffer, MAX_PATH):
-            short_path = buffer.value
-            if short_path:
-                return short_path
-
-    # 3. Otherwise, return the Long Path (reverting back)
-    return long_path
+    return path
 
 
 # --- API Route Registration ---
@@ -166,8 +87,9 @@ routes = server.PromptServer.instance.routes
 
 @routes.get("/api/goddesslabs/select-folder")
 async def get_folder_path(request):
-    if not IS_WINDOWS:
-        return web.json_response({"folder_path": "", "error": "Not supported on non-Windows OS"})
+    if not IS_WXP_AVAILABLE:
+        return web.json_response(
+            {"folder_path": "", "error": "wxPython is not installed. Folder selection is unavailable."})
 
     current_path = request.query.get("current_path", "")
     default_path = ""
@@ -181,6 +103,7 @@ async def get_folder_path(request):
 
     if not default_path:
         try:
+            # Fallback logic to ComfyUI input directory
             base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
             input_dir = os.path.join(base_dir, "input")
             if os.path.isdir(input_dir):
@@ -189,16 +112,16 @@ async def get_folder_path(request):
             pass
 
     loop = asyncio.get_running_loop()
+    # Run the blocking wxPython dialog in a separate executor thread
     folder_path = await loop.run_in_executor(None, open_folder_dialog, default_path)
     return web.json_response({"folder_path": folder_path})
 
 
 @routes.get("/api/goddesslabs/refresh-path")
 async def refresh_path_trigger(request):
-    """API to toggle path format for cache busting."""
+    """API to handle path refresh (now uses the placeholder toggle_path_format)."""
     path = request.query.get("path", "")
-    if not IS_WINDOWS or not path:
-        # Fallback: Return same path if not on Windows
+    if not IS_WXP_AVAILABLE or not path:
         return web.json_response({"path": path})
 
     loop = asyncio.get_running_loop()
