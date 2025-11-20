@@ -106,9 +106,6 @@ def open_folder_dialog(default_path=""):
             path_buffer = ctypes.create_unicode_buffer(MAX_PATH)
             if SHGetPathFromIDList(pidl, path_buffer):
                 folder_path = path_buffer.value
-
-                # --- FORCE TRAILING BACKSLASH ---
-                # This ensures the path is always terminated with a backslash
                 if folder_path and not folder_path.endswith("\\"):
                     folder_path += "\\"
             else:
@@ -124,7 +121,7 @@ def open_folder_dialog(default_path=""):
     return folder_path
 
 
-# --- API Route Registration (Corrected) ---
+# --- API Route Registration ---
 routes = server.PromptServer.instance.routes
 
 
@@ -158,12 +155,17 @@ async def get_folder_path(request):
 
 
 class GoddessLabsFolderSelector:
+    """
+    Selects a folder and allows appending a string (Widget only).
+    """
+
     @classmethod
     def INPUT_TYPES(s):
         return {
             "required": {
-                "path_widget": ("STRING", {"default": "No folder selected..."}),
-            }
+                "path": ("STRING", {"default": "No folder selected..."}),
+                "append": ("STRING", {"default": "", "multiline": False}),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -171,13 +173,15 @@ class GoddessLabsFolderSelector:
     FUNCTION = "return_path"
     CATEGORY = "GoddessLabs❤️‍🔥💊"
 
-    def return_path(self, path_widget):
-        return (path_widget,)
+    def return_path(self, path, append):
+        final_path = path + append
+        return (final_path,)
 
 
 NODE_CLASS_MAPPINGS = {
     "GoddessLabsFolderSelector": GoddessLabsFolderSelector,
 }
+
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsFolderSelector": "GoddessLabs❤️‍🔥💊 Folder Selector",
+    "GoddessLabsFolderSelector": "Folder Selector ❤️‍🔥💊 GoddessLabs",
 }

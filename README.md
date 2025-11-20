@@ -6,14 +6,16 @@
 This node pack helps to conveniently enhance images through Detector, Detailer, Upscaler, Pipe, and more.
 
 ## NOTICE 
-* V0.02: Working Prototype
+* **V0.0.3: Stable Release**
 * **IMPORTANT:** The `Folder Selector` node uses native Windows dialogs. It will **only work** if you are running ComfyUI on a local Windows machine. It will not work on Colab, RunPod, or Linux servers.
 
 ## How To Install
 
 ### **Manual**
 * Navigate to `ComfyUI/custom_nodes` in your terminal (cmd).
-* Clone the repository under the `custom_nodes` directory using the following command: git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
+* Clone the repository under the `custom_nodes` directory using the following command:
+
+git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
 
 * Install dependencies in your Python environment.
   * For Windows Portable, run the following command inside `ComfyUI\custom_nodes\ComfyUI-GoddessLabs-NodePack`:
@@ -23,4 +25,4 @@ This node pack helps to conveniently enhance images through Detector, Detailer, 
 
 ## Custom Nodes
 ### Utility
-* **GoddessLabs Folder Selector**: A helper node that opens a native Windows folder picker to easily select paths for batch processing or saving.
+* **Folder Selector ❤️‍🔥💊 GoddessLabs**: A helper node that opens a native Windows folder picker
