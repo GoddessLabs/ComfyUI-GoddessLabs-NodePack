@@ -1,4 +1,4 @@
-[![LinkTree Badge](https://img.shields.io/badge/linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white)](https://linktr.ee/goddessofai) <sup>**(18+)**</sup>
+[![LinkTree Badge](https://img.shields.io/badge/linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white)](https://linktr.ee/goddessofai)
 
 # ComfyUI-GoddessLabs-NodePack
 
@@ -29,4 +29,5 @@ git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
     * Opens a native Windows folder picker.
     * **NEW in V0.0.4:** Includes a `Reload Connected Node ⟳` button. 
         * **Note:** This button is hidden by default. To enable it, right-click the node, select **Properties**, and set `show_reload_button` to `true`.
+
         * **Function:** It forces downstream nodes (like the **JOV Video Queue**) to fully reload and refresh their file lists without restarting ComfyUI.
