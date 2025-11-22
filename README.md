@@ -1,32 +1,39 @@
-[![LinkTree Badge](https://img.shields.io/badge/linktree-39E09B?style=for-the-badge&logo=linktree&logoColor=white)](https://linktr.ee/goddessofai) <sup>**(18+)**</sup>
-
 # ComfyUI-GoddessLabs-NodePack
 
-**Custom node pack for ComfyUI**
-This node pack helps to conveniently enhance images through Detector, Detailer, Upscaler, Pipe, and more.
+A collection of custom nodes for ComfyUI by GoddessLabs.
 
-## NOTICE 
-* **V0.0.52: Stable Release**
-* **Cross-Platform:** The `Folder Browser` node now uses `wxPython`, making it compatible with Windows, macOS, and Linux (with GUI).
+## Installation
 
-## How To Install
-
-### **Manual**
-* Navigate to `ComfyUI/custom_nodes` in your terminal (cmd).
-* Clone the repository under the `custom_nodes` directory using the following command:
-
-git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack
-
-* Install dependencies in your Python environment.
-  * For Windows Portable, run the following command inside `ComfyUI\custom_nodes\ComfyUI-GoddessLabs-NodePack`:
-      ```
-      ..\..\..\python_embeded\python.exe -m pip install -r requirements.txt
-      ```
+1.  Navigate to your ComfyUI `custom_nodes` directory.
+2.  Clone this repository:
+    ```bash
+    git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack.git
+    ```
+3.  Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+    Or for portable versions:
+    ```bash
+    ..\..\..\python_embeded\python.exe -m pip install -r requirements.txt
+    ```
 
 ## Custom Nodes
+
 ### Utility
-* **Folder Browser ❤️‍🔥💊 GoddessLabs**: 
-    * Opens a native folder picker (Cross-Platform).
-    * **NEW in V0.0.4:** Includes a `Reload Connected Node ⟳` button. 
-        * **Note:** This button is hidden by default. To enable it, right-click the node, select **Properties**, and set `show_reload_button` to `true`.
-        * **Function:** It forces downstream nodes (like the **JOV Video Queue**) to fully reload and refresh their file lists without restarting ComfyUI.
+
+*   **Folder Browser ❤️‍🔥💊 GoddessLabs**:
+    *   Opens a native folder picker (Cross-Platform).
+    *   **Features:**
+        *   **Reload Button:** Optional button to reload the connected node, useful for refreshing nodes that cache data.
+        *   **Settings Gear:** A gear icon in the title bar allows you to easily toggle settings.
+        *   **Auto-Reload:** Option to automatically reload connected nodes when the folder path changes.
+        *   **Append Extension:** Quickly append file extensions to the path via the Settings Gear menu.
+    *   **Usage:**
+        *   Connect the `folder_path` output to any node expecting a path string.
+        *   Click "Select Folder" to choose a directory.
+        *   Use the Settings Gear (⚙️) to enable "Show Reload Button" or "Auto-Reload on Change".
+
+## Troubleshooting
+
+If you encounter issues with the dialog not appearing, ensure you have the latest version installed.

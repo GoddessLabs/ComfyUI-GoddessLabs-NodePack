@@ -7,6 +7,7 @@ import os
 import sys
 import logging
 import concurrent.futures
+import json
 
 # --- Cross-Platform wxPython Import ---
 try:
@@ -96,7 +97,28 @@ DIALOG_LOCK = asyncio.Lock()
 # --- Global Executor for Dialog (Single Thread to ensure wx.App consistency) ---
 DIALOG_EXECUTOR = concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
-@routes.get("/api/goddesslabs/select-folder")
+@routes.get("/goddesslabs/append-options")
+async def get_append_options(request):
+    try:
+        config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "append_options.txt")
+        if os.path.exists(config_path):
+            options = []
+            with open(config_path, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#"):
+                        options.append(line)
+            return web.json_response(options)
+        else:
+            # Default options if file doesn't exist
+            return web.json_response([
+                "*.png", "*.jpg", "*.jpeg", "*.mp4", "*.webp", "*.gif"
+            ])
+    except Exception as e:
+        logging.error(f"[GoddessLabs] Error reading append options: {e}")
+        return web.json_response({"error": str(e)}, status=500)
+
+@routes.get("/goddesslabs/select-folder")
 async def get_folder_path(request):
     if not IS_WXP_AVAILABLE:
         return web.json_response(
@@ -134,7 +156,7 @@ async def get_folder_path(request):
         return web.json_response({"folder_path": folder_path})
 
 
-@routes.get("/api/goddesslabs/refresh-path")
+@routes.get("/goddesslabs/refresh-path")
 async def refresh_path_trigger(request):
     """API to handle path refresh (now uses the placeholder toggle_path_format)."""
     path = request.query.get("path", "")

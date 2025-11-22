@@ -1,0 +1,2 @@
+1. Avoid feature creep. Do not add unnecessary features. When a sub-feature needs to be added to complete a request, get confirmation first.
+2. Maintain consistentcy across the project. Consolidate logic. Example: instead of three different variations on a function with slight variations, create a single function that can handle all variations using consistent design.

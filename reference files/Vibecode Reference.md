@@ -34,11 +34,7 @@ This document serves as a guide for future AI agents and developers maintaining 
     }
     ```
 
-## 4. Debugging & Error Handling
-**The Issue:** A syntax error in one node file can silently fail or crash the entire loading process in `__init__.py`.
-**The Fix:**
-* **Traceback:** Import `traceback` in `__init__.py` and print the full stack trace in the `except` block.
-* **Isolation:** Use a loop to import nodes individually so that one broken node does not prevent others from loading.
+
 
 ## 5. Forcing Node Refreshes (The "Destroy & Recreate" Pattern)
 **The Issue:** Certain nodes (e.g., Jovimetrix Queue) cache their inputs aggressively. Even if you update the input string, the node may still rely on an internal cache and fail to reload new files from the disk.

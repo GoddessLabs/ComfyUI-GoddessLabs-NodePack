@@ -1,0 +1,8 @@
+# Add extensions here, one per line.
+# Lines starting with # are ignored.
+*.png
+*.jpg
+*.jpeg
+*.mp4
+*.webp
+*.gif

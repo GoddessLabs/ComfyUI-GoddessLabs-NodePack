@@ -8,3 +8,10 @@
 
 ### The Fix
 * **Explicit Prefix:** Always register your Python backend routes starting with `/api/` (e.g., `/api/goddesslabs/select-folder`) to match the standard ComfyUI frontend behavior.
+
+
+## 4. Debugging & Error Handling
+**The Issue:** A syntax error in one node file can silently fail or crash the entire loading process in `__init__.py`.
+**The Fix:**
+* **Traceback:** Import `traceback` in `__init__.py` and print the full stack trace in the `except` block.
+* **Isolation:** Use a loop to import nodes individually so that one broken node does not prevent others from loading.

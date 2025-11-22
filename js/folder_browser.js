@@ -143,13 +143,27 @@ app.registerExtension({
                 onNodeCreated?.apply(this, arguments);
                 const node = this;
 
-                // Version 0.0.6
-                this.properties["version"] = "0.0.6";
+                // Version 0.0.55
+                this.properties["version"] = "0.0.55";
 
-                // --- CONFIG: Reload Button Visibility ---
+                // --- CONFIG: Reload Button Visibility & Auto-Reload ---
                 if (this.properties["show_reload_button"] === undefined) {
                     this.properties["show_reload_button"] = false;
                 }
+                if (this.properties["auto_reload_on_change"] === undefined) {
+                    this.properties["auto_reload_on_change"] = false;
+                }
+
+                // --- FETCH APPEND OPTIONS ---
+                let appendOptions = [];
+                api.fetchApi("/goddesslabs/append-options")
+                    .then(resp => resp.json())
+                    .then(data => {
+                        if (Array.isArray(data)) {
+                            appendOptions = data;
+                        }
+                    })
+                    .catch(err => console.error("[GoddessLabs] Error fetching append options:", err));
 
                 // --- VISUAL STYLING ---
                 let isRestoring = false;
@@ -179,14 +193,31 @@ app.registerExtension({
                 }, 0);
 
                 const pathWidget = this.widgets.find(w => w.name === "path");
+                const appendWidget = this.widgets.find(w => w.name === "append");
 
                 if (pathWidget) {
+                    // Hook into widget callback for manual changes
+                    const origCallback = pathWidget.callback;
+                    pathWidget.callback = function (value) {
+                        if (origCallback) origCallback.apply(this, arguments);
+                        if (node.properties["auto_reload_on_change"]) {
+                            reloadConnectedNode(node);
+                        }
+                    };
+
                     // Always add Select Folder button
                     this.addWidget(
                         "button",
                         "Select Folder",
                         null,
-                        () => { selectFolder(pathWidget); },
+                        () => {
+                            selectFolder(pathWidget).then(() => {
+                                // Trigger auto-reload if enabled (selectFolder updates value directly)
+                                if (node.properties["auto_reload_on_change"]) {
+                                    reloadConnectedNode(node);
+                                }
+                            });
+                        },
                         { serialize: false }
                     );
 
@@ -194,6 +225,17 @@ app.registerExtension({
                     if (this.properties["show_reload_button"]) {
                         addReloadButton(this);
                     }
+                }
+
+                if (appendWidget) {
+                    // Hook into append widget callback for auto-reload
+                    const origAppendCallback = appendWidget.callback;
+                    appendWidget.callback = function (value) {
+                        if (origAppendCallback) origAppendCallback.apply(this, arguments);
+                        if (node.properties["auto_reload_on_change"]) {
+                            reloadConnectedNode(node);
+                        }
+                    };
                 }
 
                 // --- PROPERTY CHANGE LISTENER ---
@@ -209,11 +251,97 @@ app.registerExtension({
                         } else {
                             removeReloadButton(node);
                         }
-
-                        // FIX: Trigger resize only on explicit property change
                         node.setDirtyCanvas(true, true);
                     }
                 };
+
+                // --- SETTINGS GEAR IMPLEMENTATION ---
+                const onDrawForeground = node.onDrawForeground;
+                node.onDrawForeground = function (ctx) {
+                    if (onDrawForeground) onDrawForeground.apply(this, arguments);
+
+                    if (this.flags.collapsed) return;
+
+                    ctx.save();
+
+                    // Position: Right side of the title bar
+                    // Title bar height is typically 30px. Center vertically at -15.
+                    const x = this.size[0] - 20;
+                    const y = -15;
+
+                    ctx.font = "16px Arial";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText("⚙️", x, y);
+
+                    ctx.restore();
+                };
+
+                const onMouseDown = node.onMouseDown;
+                node.onMouseDown = function (e, pos, canvas) {
+                    if (e.button === 0) { // Left click
+                        const x = this.size[0] - 20;
+                        const y = -15;
+
+                        const clickX = pos[0];
+                        const clickY = pos[1];
+
+                        // Hit test (approx 20x20 box around the center)
+                        const dist = Math.sqrt(Math.pow(clickX - x, 2) + Math.pow(clickY - y, 2));
+
+                        if (dist < 12) { // Radius of hit area
+                            showSettingsMenu(this, e);
+                            return true; // Consume event
+                        }
+                    }
+                    if (onMouseDown) return onMouseDown.apply(this, arguments);
+                };
+
+                function showSettingsMenu(node, e) {
+                    const options = [
+                        {
+                            content: (node.properties["show_reload_button"] ? "✔ " : "  ") + "Show Reload Button",
+                            callback: () => {
+                                node.properties["show_reload_button"] = !node.properties["show_reload_button"];
+                                node.onPropertyChanged("show_reload_button", node.properties["show_reload_button"]);
+                            }
+                        },
+                        {
+                            content: (node.properties["auto_reload_on_change"] ? "✔ " : "  ") + "Auto-Reload on Change",
+                            callback: () => {
+                                node.properties["auto_reload_on_change"] = !node.properties["auto_reload_on_change"];
+                                node.onPropertyChanged("auto_reload_on_change", node.properties["auto_reload_on_change"]);
+                            }
+                        },
+                        {
+                            content: "Append Extension",
+                            has_submenu: true,
+                            callback: () => { }, // Submenu handles click
+                            submenu: {
+                                options: [
+                                    ...appendOptions.map(opt => ({
+                                        content: opt,
+                                        callback: () => {
+                                            const appendWidget = node.widgets.find(w => w.name === "append");
+                                            if (appendWidget) {
+                                                appendWidget.value = opt;
+                                                // Trigger callback manually if needed, though append usually doesn't trigger reload
+                                                if (appendWidget.callback) {
+                                                    appendWidget.callback(appendWidget.value);
+                                                }
+                                                node.setDirtyCanvas(true, true);
+                                            }
+                                        }
+                                    })),
+                                    { content: null }, // Separator
+                                    { content: "(append_options.txt to add/remove)", disabled: true }
+                                ]
+                            }
+                        }
+                    ];
+
+                    new LiteGraph.ContextMenu(options, { event: e, parentMenu: null, node: node });
+                }
 
                 // --- SIZE CALCULATION ---
                 const originalComputeSize = this.computeSize;
