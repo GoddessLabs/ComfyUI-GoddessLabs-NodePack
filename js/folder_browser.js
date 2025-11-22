@@ -6,12 +6,13 @@ import { api } from "/scripts/api.js";
 async function selectFolder(widget) {
     const currentPath = widget.value;
     try {
-        const resp = await api.fetchApi("/goddesslabs/select-folder", {
+        // FIX: Manually construct query string as api.fetchApi doesn't serialize params object
+        const params = new URLSearchParams({
+            current_path: currentPath
+        });
+        const resp = await api.fetchApi(`/goddesslabs/select-folder?${params.toString()}`, {
             method: "GET",
-            cache: "no-store",
-            params: {
-                current_path: encodeURIComponent(currentPath)
-            }
+            cache: "no-store"
         });
 
         if (resp.status === 200) {
@@ -143,16 +144,35 @@ app.registerExtension({
                 onNodeCreated?.apply(this, arguments);
                 const node = this;
 
-                // Version 0.0.55
-                this.properties["version"] = "0.0.55";
+                // Version 0.0.6
+                this.properties["version"] = "0.0.6";
 
                 // --- CONFIG: Reload Button Visibility & Auto-Reload ---
-                if (this.properties["show_reload_button"] === undefined) {
-                    this.properties["show_reload_button"] = false;
-                }
-                if (this.properties["auto_reload_on_change"] === undefined) {
-                    this.properties["auto_reload_on_change"] = false;
-                }
+                // Fetch config from backend first
+                api.fetchApi("/goddesslabs/config")
+                    .then(resp => resp.json())
+                    .then(config => {
+                        // Only apply defaults if properties are undefined (fresh node)
+                        if (this.properties["show_reload_button"] === undefined) {
+                            this.properties["show_reload_button"] = config.show_reload_button === "true";
+                        }
+                        if (this.properties["auto_reload_on_change"] === undefined) {
+                            this.properties["auto_reload_on_change"] = config.auto_reload_on_change === "true";
+                        }
+
+                        // Apply button state after config load
+                        if (this.properties["show_reload_button"]) {
+                            addReloadButton(this);
+                        } else {
+                            removeReloadButton(this);
+                        }
+                    })
+                    .catch(err => {
+                        console.error("[GoddessLabs] Error fetching config:", err);
+                        // Fallback defaults
+                        if (this.properties["show_reload_button"] === undefined) this.properties["show_reload_button"] = false;
+                        if (this.properties["auto_reload_on_change"] === undefined) this.properties["auto_reload_on_change"] = false;
+                    });
 
                 // --- FETCH APPEND OPTIONS ---
                 let appendOptions = [];

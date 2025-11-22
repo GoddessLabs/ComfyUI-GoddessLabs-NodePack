@@ -1,0 +1,16 @@
+# Folder Browser Configuration
+# Format: KEY=VALUE
+# Lines starting with # are comments.
+
+# Default path to open when no folder is selected.
+# Leave empty to default to ComfyUI input directory.
+# Example: default_path=C:\Users\Public\Pictures
+default_path=
+
+# Automatically reload connected nodes when the path or append value changes.
+# Values: true, false
+auto_reload_on_change=false
+
+# Show the "Reload Connected Node" button in the node UI.
+# Values: true, false
+show_reload_button=false

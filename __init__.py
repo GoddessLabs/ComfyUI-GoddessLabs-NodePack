@@ -83,8 +83,7 @@ check_and_install_dependencies()
 # --- END: Automatic Dependency Installation Logic ---
 
 node_list = [
-    "folder_browser",
-    # Note: folder_selector.py seems to be an old version, ensuring we only load the latest file
+    "utility.folder_browser.folder_browser",
 ]
 
 NODE_CLASS_MAPPINGS = {}
@@ -109,10 +108,6 @@ for module_name in node_list:
 
     except Exception as e:
         logging.error(f"[GoddessLabs] ERROR loading node module '{module_name}'")
-        # Note on Windows: If ctypes is imported at the top level of folder_browser.py, and this is NOT Windows,
-        # it will still crash here, even with the try/except in the node file.
-        # However, your folder_browser.py handles it with the `try/except` around `import ctypes` and `if IS_WINDOWS:` checks,
-        # which is the correct way, so this should only fail if a required dependency for the rest of the node is truly missing.
         traceback.print_exc()
 
 WEB_DIRECTORY = "js"
