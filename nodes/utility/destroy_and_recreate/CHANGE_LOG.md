@@ -1,5 +1,9 @@
 # Change Log - Cache Buster 💥
 
+## V0.0.8
+- **Rename**: Renamed node to "Destroy & Recreate ❤️‍🔥💊 GoddessLabs".
+- **UX Improvement**: Disabled the "No node connected" alert when the output is disconnected.
+
 ## V0.0.7
 - **Initial Release**:
     - Pass-through utility node.

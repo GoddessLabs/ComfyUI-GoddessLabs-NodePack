@@ -12,7 +12,7 @@ function reloadConnectedNode(sourceNode) {
     const graph = app.graph;
     const output = sourceNode.outputs[0];
     if (!output || !output.links || output.links.length === 0) {
-        alert("[GoddessLabs] No node connected to output!");
+        // alert("[GoddessLabs] No node connected to output!");
         return;
     }
 
@@ -154,7 +154,7 @@ app.registerExtension({
                         }
                     } else {
                         if (!this.inputs || this.inputs.length === 0) {
-                            this.addInput("any_input", "*");
+                            this.addInput("any", "*");
                         }
                     }
                 }, 50);
@@ -171,7 +171,7 @@ app.registerExtension({
 
                     if (name === "show_input") {
                         if (value === true) {
-                            if (!node.inputs || node.inputs.length === 0) node.addInput("any_input", "*");
+                            if (!node.inputs || node.inputs.length === 0) node.addInput("any", "*");
                         } else {
                             if (node.inputs && node.inputs.length > 0) node.removeInput(0);
                         }
@@ -257,8 +257,9 @@ app.registerExtension({
                     if (type === 1 && index === 0) {
                         if (connected) {
                             // Connected: Update output type to match source
-                            const link = app.graph.links[link_info.id];
-                            if (link) {
+                            // Fix: link_info can be null during initial load
+                            if (link_info && app.graph.links[link_info.id]) {
+                                const link = app.graph.links[link_info.id];
                                 const originNode = app.graph.getNodeById(link.origin_id);
                                 if (originNode && originNode.outputs && originNode.outputs[link.origin_slot]) {
                                     const originType = originNode.outputs[link.origin_slot].type;
@@ -269,7 +270,7 @@ app.registerExtension({
                         } else {
                             // Disconnected: Revert to wildcard
                             node.outputs[0].type = "*";
-                            node.outputs[0].name = "any_output";
+                            node.outputs[0].name = "any";
                         }
                     }
 

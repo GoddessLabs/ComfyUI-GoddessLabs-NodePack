@@ -9,6 +9,13 @@ Todo List:
 ## Future Node Ideas
 - Append options node
 
+## Button Node
+    - **Purpose:** Provides a simple, clickable interface within the workflow to trigger an action or event.
+    - **Functionality:**
+        - Displays customizable text on the button.
+        - Emits a signal or event on click, which can be connected to other nodes' inputs to initiate processes.
+
+
 ## Savestates Node
     - **Niche Frustration:** You are tweaking a Sampler to find the perfect settings. You change cfg from 7 to 8, then 8 to 6. You forgot what the settings were 3 steps ago that looked good.
     - **Solution:** Add "Slot" buttons (1, 2, 3) to the node UI.

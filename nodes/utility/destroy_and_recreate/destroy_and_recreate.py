@@ -61,5 +61,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsDestroyAndRecreate": "Cache Buster ❤️‍🔥💊 GoddessLabs",
+    "GoddessLabsDestroyAndRecreate": "Destroy & Recreate ❤️‍🔥💊 GoddessLabs",
 }

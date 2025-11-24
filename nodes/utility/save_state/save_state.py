@@ -1,5 +1,7 @@
 # File: ComfyUI-GoddessLabs-NodePack/nodes/utility/save_state/save_state.py
 
+import server
+
 class AnyType(str):
     """A special class that is always equal in not equal comparisons."""
     def __ne__(self, __value):
@@ -18,6 +20,7 @@ class GoddessLabsSaveState:
         return {
             "required": {},
             "optional": {
+                # Input is optional to support the Toggle ON/OFF feature in JS
                 "any_input": (any_type,),
             },
             "hidden": {
@@ -38,5 +41,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsSaveState": "Save State 💾 GoddessLabs",
+    "GoddessLabsSaveState": "Save State ❤️‍🔥💊 GoddessLabs",
 }

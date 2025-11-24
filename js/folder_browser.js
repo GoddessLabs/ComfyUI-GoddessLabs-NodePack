@@ -46,7 +46,7 @@ function reloadConnectedNode(sourceNode) {
     const graph = app.graph;
     const output = sourceNode.outputs[0];
     if (!output || !output.links || output.links.length === 0) {
-        alert("[GoddessLabs] No node connected to 'folder_path' link!");
+        // alert("[GoddessLabs] No node connected to 'folder_path' link!");
         return;
     }
 
@@ -181,7 +181,7 @@ app.registerExtension({
                     .catch(err => {
                         console.error("[GoddessLabs] Error fetching config:", err);
                         // Fallback defaults
-                        if (this.properties["show_reload_button"] === undefined) this.properties["show_reload_button"] = false;
+                        if (this.properties["show_reload_button"] === undefined) this.properties["show_reload_button"] = true;
                         if (this.properties["auto_reload_on_change"] === undefined) this.properties["auto_reload_on_change"] = false;
                     });
 
@@ -331,20 +331,6 @@ app.registerExtension({
                 function showSettingsMenu(node, e) {
                     const options = [
                         {
-                            content: (node.properties["show_reload_button"] ? "✔ " : "  ") + "Show Reload Button",
-                            callback: () => {
-                                node.properties["show_reload_button"] = !node.properties["show_reload_button"];
-                                node.onPropertyChanged("show_reload_button", node.properties["show_reload_button"]);
-                            }
-                        },
-                        {
-                            content: (node.properties["auto_reload_on_change"] ? "✔ " : "  ") + "Auto-Reload on Change",
-                            callback: () => {
-                                node.properties["auto_reload_on_change"] = !node.properties["auto_reload_on_change"];
-                                node.onPropertyChanged("auto_reload_on_change", node.properties["auto_reload_on_change"]);
-                            }
-                        },
-                        {
                             content: "Append Extension",
                             has_submenu: true,
                             callback: () => { }, // Submenu handles click
@@ -367,6 +353,20 @@ app.registerExtension({
                                     { content: null }, // Separator
                                     { content: "(append_options.txt to add/remove)", disabled: true }
                                 ]
+                            }
+                        },
+                        {
+                            content: (node.properties["show_reload_button"] ? "✔ " : "  ") + "Show Reload Button",
+                            callback: () => {
+                                node.properties["show_reload_button"] = !node.properties["show_reload_button"];
+                                node.onPropertyChanged("show_reload_button", node.properties["show_reload_button"]);
+                            }
+                        },
+                        {
+                            content: (node.properties["auto_reload_on_change"] ? "✔ " : "  ") + "Auto-Reload on Change",
+                            callback: () => {
+                                node.properties["auto_reload_on_change"] = !node.properties["auto_reload_on_change"];
+                                node.onPropertyChanged("auto_reload_on_change", node.properties["auto_reload_on_change"]);
                             }
                         }
                     ];

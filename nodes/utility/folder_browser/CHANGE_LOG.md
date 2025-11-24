@@ -1,5 +1,8 @@
 # Change Log - Folder Browser ❤️‍🔥💊
 
+## V0.0.8
+- **UX Improvement**: Disabled the "No node connected" alert when the output is disconnected.
+
 ## V0.0.6
 - **Config File**: Introduced `config.txt` for customizing default path and auto-reload behavior.
 - **Refactoring**: Moved node to `nodes/utility/folder_browser/`.

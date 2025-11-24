@@ -1,5 +1,17 @@
 # Patch Notes
 
+## V0.0.8
+- **Save State Node Fixes**:
+    - Fixed "Save" and "Load" buttons not responding to clicks.
+    - Added visual flashing feedback when buttons are clicked.
+    - Fixed syntax errors and code duplication in `save_state.js`.
+    - Restored correct event handling for widgets.
+- **Destroy & Recreate Node**:
+    - Renamed node to "Destroy & Recreate ❤️‍🔥💊 GoddessLabs".
+    - Disabled annoying "No node connected" alerts for smoother workflow.
+- **Folder Browser Node**:
+    - Disabled "No node connected" alerts.
+
 ## V0.0.7
 - **New Node**: "Destroy & Recreate 💥"
     - A pass-through utility node with a "Reload Node ⟳" button.

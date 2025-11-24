@@ -13,4 +13,4 @@ auto_reload_on_change=false
 
 # Show the "Reload Connected Node" button in the node UI.
 # Values: true, false
-show_reload_button=false
+show_reload_button=true
