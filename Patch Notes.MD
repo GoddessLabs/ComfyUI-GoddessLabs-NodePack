@@ -1,5 +1,11 @@
 # Patch Notes
 
+## V0.0.7
+- **New Node**: "Destroy & Recreate 💥"
+    - A pass-through utility node with a "Reload Node ⟳" button.
+    - Forces downstream nodes to re-execute by destroying and recreating the node (breaking the execution cache).
+    - Useful for forcing updates when inputs haven't changed (e.g., external file updates).
+
 ## V0.0.6 (Stable Release)
 - **Config File**: Added `config.txt` in `nodes/utility/folder_browser/` to customize default behavior.
     - `default_path`: Set a custom starting directory for the dialog.

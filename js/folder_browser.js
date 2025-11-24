@@ -37,6 +37,11 @@ async function selectFolder(widget) {
  * Finds the node connected to the "folder_path" output, destroys it,
  * and creates a fresh clone with the same settings/connections.
  */
+/**
+ * Finds the node connected to the "folder_path" output, destroys it,
+ * and creates a fresh clone with the same settings/connections.
+ * Implements "Ghost" connections to prevent visual flickering.
+ */
 function reloadConnectedNode(sourceNode) {
     const graph = app.graph;
     const output = sourceNode.outputs[0];
@@ -55,18 +60,21 @@ function reloadConnectedNode(sourceNode) {
         const oldNode = graph.getNodeById(link.target_id);
         if (!oldNode) return;
 
+        // 1. Create the new node
         const newNode = LiteGraph.createNode(oldNode.type);
         newNode.pos = [oldNode.pos[0], oldNode.pos[1]];
         newNode.size = [...oldNode.size];
 
+        // 2. Copy properties
         if (oldNode.properties) newNode.properties = JSON.parse(JSON.stringify(oldNode.properties));
         if (oldNode.color) newNode.color = oldNode.color;
         if (oldNode.bgcolor) newNode.bgcolor = oldNode.bgcolor;
-        // FIX: Copy title to prevent loss
         if (oldNode.title) newNode.title = oldNode.title;
 
+        // 3. Add new node to graph (Ghost phase: both nodes exist)
         graph.add(newNode);
 
+        // 4. Copy widgets
         if (oldNode.widgets && newNode.widgets) {
             for (let i = 0; i < oldNode.widgets.length; i++) {
                 const sourceWidget = oldNode.widgets[i];
@@ -77,6 +85,7 @@ function reloadConnectedNode(sourceNode) {
             }
         }
 
+        // 5. Reconnect Inputs (Ghost connections)
         if (oldNode.inputs) {
             for (let i = 0; i < oldNode.inputs.length; i++) {
                 const input = oldNode.inputs[i];
@@ -88,6 +97,7 @@ function reloadConnectedNode(sourceNode) {
             }
         }
 
+        // 6. Reconnect Outputs (Ghost connections)
         if (oldNode.outputs) {
             for (let i = 0; i < oldNode.outputs.length; i++) {
                 const output = oldNode.outputs[i];
@@ -102,6 +112,7 @@ function reloadConnectedNode(sourceNode) {
             }
         }
 
+        // 7. Remove old node (Ghost phase ends)
         graph.remove(oldNode);
         reloadedCount++;
     });

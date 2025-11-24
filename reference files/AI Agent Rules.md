@@ -1,6 +1,8 @@
 1. Avoid feature creep. Do not add unnecessary features. When a sub-feature needs to be added to complete a request, get confirmation first.
 2. Maintain consistentcy across the project. Consolidate logic. Example: instead of three different variations on a function with slight variations, create a single function that can handle all variations using consistent design.
 3. Update md files as needed to document changes. Take care to not remove any previous information that could be useful for future reference.
+4. Maintain consistency in node design and styling. Nodes must be box-shaped, default to purple (`#6a0dad`), and consistently apply common UI elements (e.g., settings gear) where useful.
+5. Consistently document changes in the patch notes.
 
 ## Technical Guidelines
 
