@@ -1,97 +1,4 @@
-# File: ComfyUI-GoddessLabs-NodePack/nodes/folder_browser.py
 
-import server
-import asyncio
-from aiohttp import web
-import os
-import sys
-import logging
-import concurrent.futures
-import json
-
-# --- Cross-Platform wxPython Import ---
-try:
-    import wx
-
-    IS_WXP_AVAILABLE = True
-except ImportError:
-    IS_WXP_AVAILABLE = False
-    logging.warning("[GoddessLabs] Warning: wxPython is not installed. Folder Browser will not function.")
-
-
-# --- Folder Dialog Implementation using wxPython ---
-
-def open_folder_dialog(default_path=""):
-    """
-    Opens a native folder selection dialog using wxPython.
-    This function should be executed on the main thread or in a way
-    that allows wxPython to run its event loop (executed via run_in_executor).
-    """
-    if not IS_WXP_AVAILABLE:
-        print("[GoddessLabs] Error: wxPython not available.")
-        return None
-
-    # Use a minimal wx.App and wx.Frame to host the dialog
-    # wx.App(False) prevents stdout/stderr redirection
-    # CHECK: If a wx.App already exists, use it. Otherwise, create one.
-    app = wx.App.Get()
-    if not app:
-        app = wx.App(False)
-    
-    # Create a hidden frame to act as parent and enforce Z-order
-    # Positioned off-screen to be invisible to the user
-    frame = wx.Frame(None, -1, "GoddessLabs Hidden Frame", pos=(-10000, -10000), size=(0, 0), style=wx.FRAME_NO_TASKBAR | wx.STAY_ON_TOP)
-    frame.Show()
-    frame.Raise()
-
-    # Path normalization for default_path
-    if not os.path.isdir(default_path):
-        default_path = ""
-
-    folder_path = None
-
-    try:
-        # Use DirDialog to select a folder
-        with wx.DirDialog(
-                frame,
-                "GoddessLabs❤️‍🔥💊 - Select Folder",
-                defaultPath=default_path,
-                style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST
-        ) as dlg:
-            
-            # Attempt to bring dialog to front
-            dlg.Raise()
-            dlg.RequestUserAttention()
-
-            if dlg.ShowModal() == wx.ID_OK:
-                folder_path = dlg.GetPath()
-    except Exception as e:
-        print(f"[GoddessLabs] Error opening wxPython folder dialog: {e}")
-        logging.error(f"[GoddessLabs] Error opening wxPython folder dialog: {e}")
-    finally:
-        # Clean up wx resources
-        frame.Destroy()
-        # DO NOT exit the MainLoop if we are reusing the App instance.
-        pass
-
-    # Ensure path ends with the correct OS separator
-    if folder_path and not folder_path.endswith(os.path.sep):
-        folder_path += os.path.sep
-
-    return folder_path
-
-
-def toggle_path_format(path):
-    """
-    Placeholder for the old Windows-specific cache-busting function (Short/Long Path).
-    It now returns the path unchanged, relying on the JS side node-recreation for cache-busting.
-    """
-    return path
-
-
-# --- API Route Registration ---
-routes = server.PromptServer.instance.routes
-# File: ComfyUI-GoddessLabs-NodePack/nodes/folder_browser.py
 
 import server
 import asyncio
@@ -324,5 +231,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsFolderSelector": "Folder Browser ❤️‍🔥💊 GoddessLabs",
+    "GoddessLabsFolderSelector": "❤️‍🔥📂 Folder Browser",
 }

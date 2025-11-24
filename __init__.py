@@ -1,8 +1,8 @@
-# File: ComfyUI-GoddessLabs-NodePack/__init__.py
+
 
 """
 @author: GoddessLabs
-@title: GoddessLabs NodePack
+@title: ❤️‍🔥💊 GoddessLabs Toolset
 @nickname: GoddessLabs
 @description: Custom nodes to conveniently enhance images through Detector, Detailer, Upscaler, Pipe, and more.
 """
@@ -18,7 +18,7 @@ import sys
 version_code = [0, 0, 7]
 version_str = f"V{version_code[0]}.{version_code[1]}" + (f'.{version_code[2]}' if len(version_code) > 2 else '')
 
-logging.info(f"### Loading: ComfyUI-GoddessLabs-NodePack ({version_str})")
+logging.info(f"### Loading: ❤️‍🔥💊 GoddessLabs Toolset ({version_str})")
 
 # --- START: Automatic Dependency Installation Logic ---
 FILE_DIR = os.path.dirname(__file__)

@@ -1,4 +1,4 @@
-// File: ComfyUI-GoddessLabs-NodePack/js/folder_browser.js
+
 
 import { app } from "/scripts/app.js";
 import { api } from "/scripts/api.js";

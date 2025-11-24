@@ -1,4 +1,4 @@
-# File: ComfyUI-GoddessLabs-NodePack/nodes/utility/save_state/save_state.py
+
 
 import server
 
@@ -41,5 +41,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsSaveState": "Save State ❤️‍🔥💊 GoddessLabs",
+    "GoddessLabsSaveState": "❤️‍🔥💾 Save State",
 }

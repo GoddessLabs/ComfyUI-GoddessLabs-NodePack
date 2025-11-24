@@ -1,4 +1,4 @@
-# File: ComfyUI-GoddessLabs-NodePack/nodes/utility/destroy_and_recreate/destroy_and_recreate.py
+
 
 import server
 
@@ -61,5 +61,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsDestroyAndRecreate": "Destroy & Recreate ❤️‍🔥💊 GoddessLabs",
+    "GoddessLabsDestroyAndRecreate": "❤️‍🔥💥 Destroy & Recreate",
 }

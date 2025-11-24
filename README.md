@@ -1,4 +1,4 @@
-# ComfyUI-GoddessLabs-NodePack
+# ❤️‍🔥💊 GoddessLabs Toolset
 
 A collection of custom nodes for ComfyUI by GoddessLabs.
 
