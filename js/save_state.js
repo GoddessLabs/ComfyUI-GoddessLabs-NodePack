@@ -187,8 +187,22 @@ app.registerExtension({
 
                     const link = graph.links[output.links[0]];
                     const targetNode = graph.getNodeById(link.target_id);
+                    if (!targetNode) return;
 
-                };
-            }
+                    if (targetNode.widgets && state.widgets) {
+                        for (const w of targetNode.widgets) {
+                            if (state.widgets[w.name] !== undefined) {
+                                w.value = state.widgets[w.name];
+                                if (w.callback && w.type !== "button") {
+                                    w.callback(w.value, graph.canvas, targetNode, targetNode.pos, null);
+                                }
+                            }
+                        }
+                        targetNode.setDirtyCanvas(true, true);
+                    }
+                }
+
+            };
         }
-    });
+    }
+});
