@@ -1,58 +1,75 @@
-# Patch Notes: GoddessLabs ❤️‍🔥💊  NodePack 
+# Patch Notes
 
-## V0.0.51: The "Visual Polish" Update
-**Focus:** User Interface Refinement
-* **Visuals:**
-    * **Width Padding:** Increased default node width padding from **5px** to **10px** for improved text widget visibility and breathing room.
+## V0.0.8
+- **Save State Node Fixes**:
+    - Fixed "Save" and "Load" buttons not responding to clicks.
+    - Added visual flashing feedback when buttons are clicked.
+    - Fixed syntax errors and code duplication in `save_state.js`.
+    - Restored correct event handling for widgets.
+- **Destroy & Recreate Node**:
+    - Renamed node to "Destroy & Recreate ❤️‍🔥💊 GoddessLabs".
+    - Disabled annoying "No node connected" alerts for smoother workflow.
+- **Folder Browser Node**:
+    - Disabled "No node connected" alerts.
 
----
+## V0.0.7
+- **New Node**: "Destroy & Recreate 💥"
+    - A pass-through utility node with a "Reload Node ⟳" button.
+    - Forces downstream nodes to re-execute by destroying and recreating the node (breaking the execution cache).
+    - Useful for forcing updates when inputs haven't changed (e.g., external file updates).
 
-## V0.0.5: The "Cross-Platform" Update
-**Focus:** Platform Compatibility & Dependency Modernization
-* **Core Change:**
-    * **Folder Browser:** The underlying native folder selection logic has been completely replaced.
-    * **Removed:** Windows-specific `ctypes` and `wintypes` APIs.
-    * **Added:** Cross-platform **wxPython** library (`wx.DirDialog`).
-    * **Result:** The `Folder Browser` node is now compatible with Linux (with a GUI environment) and macOS, in addition to Windows.
-* **Dependencies:**
-    * The `__init__.py` dependency check now uses `import wx` to confirm environment readiness.
+## V0.0.6 (Stable Release)
+- **Config File**: Added `config.txt` in `nodes/utility/folder_browser/` to customize default behavior.
+    - `default_path`: Set a custom starting directory for the dialog.
+    - `auto_reload_on_change`: Enable/disable auto-reload by default.
+    - `show_reload_button`: Show/hide the reload button by default.
+- **Fix Default Path**: Resolved an issue where the dialog would not default to the last selected path.
+- **Project Structure**: Refactored project structure for better stability and future expansion.
+- **Documentation**: Added `AI Ideas.md` for future development concepts.
 
----
+## V0.0.56.1
+- **Fix Default Path**: Resolved an issue where the folder browser would not default to the previously selected path due to a communication error between frontend and backend.
+- **Version Display**: Updated to 0.0.56.1.
 
-## V0.0.4: The "Force Reload" Update
-**Focus:** Interactivity & Cache Busting
-* **Renaming:**
-    * **File:** Renamed `folder_selector.py` to `folder_browser.py`.
-    * **Title:** Node title changed to **Folder Browser ❤️‍🔥💊 GoddessLabs**.
-* **New Feature:**
-    * **Reload Connected Node ⟳ Button:** Added a button to the Folder Browser node.
-    * **Configuration:** The button is hidden by default. It can be enabled via the **Properties** panel (`show_reload_button`: true).
-    * **Functionality:** Clicking this button finds the connected downstream node (e.g., JOV Video Queue), deletes it, and immediately replaces it with a fresh clone.
-    * **Why:** This solves the issue where nodes with aggressive internal caching wouldn't see new files added to a folder until ComfyUI was fully restarted.
-* **Visuals:**
-    * **Padding:** Reduced default width padding from 15px to **5px** for a cleaner look.
-* **Improvement:**
-    * **Stability:** Optimized the node recreation logic to ensure all wires (inputs and outputs) are preserved during the reload process.
+## V0.0.55
+- **Auto-Reload on Append**: The "Auto-Reload on Change" feature now triggers when the `append` widget changes, whether by manual input or selecting from the dropdown.
 
-## V0.0.3: The "Visual Style" Update
-**Focus:** Stability & Visual Polish
-* **Visuals:**
-    * **Name:** Node is now titled **Folder Selector ❤️‍🔥💊 GoddessLabs**.
-    * **Styling:** Defaults to **Purple (#633CCA)** and **Box Shape** upon creation.
-    * **Smart Styling:** Styling is only applied when dragging a *new* node; it will not override custom colors on saved workflows.
-* **User Experience:**
-    * **Width:** Node initializes with **+15px** extra width to ensure text labels aren't cramped.
-    * **Simplified Inputs:**
-        * `Path` (String Widget)
-        * `Append` (String Widget)
-    * *Note: Previous experimental toggle features were removed to prioritize rock-solid stability.*
-* **Technical:**
-    * **Safety:** `ctypes` imports are wrapped to preventing crashing on non-Windows systems.
-    * **API:** Route registration uses the robust `@routes.get` decorator with `/api/` prefixes.
+## V0.0.54.1
+- **Append Extension Refinement**:
+    - The "Append Extension" dropdown now targets the `append` widget instead of the `path` widget.
+    - Configuration has been simplified to a text file: `append_options.txt`.
+    - Added a help note in the dropdown menu.
 
-## V0.0.2: The "Vibecode" Stabilization
-* **Focus:** Architecture Fixes.
-* **Critical:** Fixed API 404 errors and Linux import crashes.
+## V0.0.54
+- **Append Extension**: Added a new submenu to the Settings Gear to quickly append file extensions to the path.
+- **Customization**: Extensions can be customized via `append_options.json` (now replaced by `.txt`).
+- **Fix**: Version display now correctly shows "0.0.54".
 
-## V0.0.1: Initial Prototype
-* **Limitation:** Strictly local Windows execution only.
+## V0.0.53 - The "Settings & Stability" Update
+**New Features:**
+- **Settings Gear Icon:** Added a settings gear icon to the node title bar. Clicking this icon opens a menu to toggle options.
+- **Auto-Reload on Change:** Added an option to automatically reload connected nodes whenever the folder path changes (toggleable via Settings Gear).
+- **Z-Order Fix:** Resolved a regression where the folder dialog would appear behind the main window. The dialog now correctly stays on top of the ComfyUI window.
+
+**Improvements:**
+- **Code Cleanup:** Refactored `js/folder_browser.js` to remove duplicated code and improve maintainability.
+- **Documentation:** Updated `README.md` and reference files to reflect the latest changes.
+
+## V0.0.52 - The "Stability & UX" Update
+**Bug Fixes:**
+- **Fixed Multiple Dialog Crash:** Prevented the application from crashing if the user attempted to open multiple folder dialogs simultaneously. Added a lock mechanism to ensure only one dialog can be open at a time.
+- **Fixed Freeze on Cancel:** Resolved an issue where the node would freeze if the user cancelled the folder dialog. This was due to a threading issue with `wxPython` which has now been fixed by using a dedicated single-threaded executor.
+- **Fixed Blank Window Crash:** Fixed a crash that occurred when a blank window was created.
+- **Fixed Z-Order Issue:** Addressed the issue where the folder dialog would sometimes appear behind the main ComfyUI window.
+- **Fixed Node Resizing:** The node no longer unexpectedly resizes itself.
+- **Fixed Title Loss:** Connected nodes now retain their titles when the "Reload connections" feature is used.
+- **Fixed Settings Persistence:** The `show_reload_button` setting now correctly persists across restarts.
+
+**Technical Changes:**
+- **wxPython Lifecycle:** Improved the management of the `wx.App` lifecycle to prevent crashes and ensure stability.
+- **Hidden Parent Frame:** Implemented a hidden parent frame for the `wx.DirDialog` to ensure it always appears on top of other windows.
+
+## V0.0.51
+- Initial Release of the Folder Browser Node.
+- Basic folder selection functionality.
+- "Reload Connected Node" button.

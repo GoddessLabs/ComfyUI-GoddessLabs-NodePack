@@ -1,8 +1,8 @@
-# File: ComfyUI-GoddessLabs-NodePack/__init__.py
+
 
 """
 @author: GoddessLabs
-@title: GoddessLabs NodePack
+@title: ❤️‍🔥💊 GoddessLabs Toolset
 @nickname: GoddessLabs
 @description: Custom nodes to conveniently enhance images through Detector, Detailer, Upscaler, Pipe, and more.
 """
@@ -14,34 +14,24 @@ import os
 import subprocess
 import sys
 
-# Version 0.0.5
-version_code = [0, 0, 5]
+# Version 0.0.7
+version_code = [0, 0, 7]
 version_str = f"V{version_code[0]}.{version_code[1]}" + (f'.{version_code[2]}' if len(version_code) > 2 else '')
 
-logging.info(f"### Loading: ComfyUI-GoddessLabs-NodePack ({version_str})")
+logging.info(f"### Loading: ❤️‍🔥💊 GoddessLabs Toolset ({version_str})")
 
 # --- START: Automatic Dependency Installation Logic ---
-# This checks for the requirements.txt and installs them if a dependency is missing.
 FILE_DIR = os.path.dirname(__file__)
 REQUIREMENTS_PATH = os.path.join(FILE_DIR, "requirements.txt")
-
-
-# We can check for a specific dependency like 'tk' (the dependency in your requirements.txt)
-# to see if we should run the installer.
 
 def check_and_install_dependencies():
     """
     Checks if a dependency is missing and installs all requirements if needed.
-    This function uses a subprocess to run 'pip install -r requirements.txt'.
     """
     try:
-        # Check for a specific package (e.g., 'wx' is used in your requirements.txt)
-        # If the import succeeds, dependencies are likely satisfied.
-        # Note: If your dependency is a sub-module (e.g., 'PIL' for 'Pillow'), check the top-level name.
         importlib.import_module('wx')
         return
     except ImportError:
-        # If the import fails, proceed with installation.
         logging.warning("[GoddessLabs] Dependencies not found. Attempting to install packages from requirements.txt...")
 
     if not os.path.exists(REQUIREMENTS_PATH):
@@ -49,11 +39,7 @@ def check_and_install_dependencies():
         return
 
     try:
-        # Determine the correct python executable path
-        # Using sys.executable ensures we use the same Python environment that is running ComfyUI.
         python_exec = sys.executable
-
-        # Use the subprocess to run pip install
         command = [python_exec, "-m", "pip", "install", "-r", REQUIREMENTS_PATH]
 
         logging.info(f"[GoddessLabs] Running installation command: {' '.join(command)}")
@@ -78,13 +64,14 @@ def check_and_install_dependencies():
         logging.error(f"[GoddessLabs] An unexpected error occurred during dependency installation: {e}")
         traceback.print_exc()
 
-
 check_and_install_dependencies()
 # --- END: Automatic Dependency Installation Logic ---
 
+# Define the list of node modules to load
 node_list = [
-    "folder_browser",
-    # Note: folder_selector.py seems to be an old version, ensuring we only load the latest file
+    "utility.folder_browser.folder_browser",
+    "utility.destroy_and_recreate.destroy_and_recreate",
+    "utility.node_state_manager.node_state_manager",
 ]
 
 NODE_CLASS_MAPPINGS = {}
@@ -92,8 +79,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {}
 
 for module_name in node_list:
     try:
-        # The importlib.reload is useful here after installing new modules
-        # It attempts to reload the module if it was already loaded before the dependency installation.
+        # Reload module if it was already loaded (e.g. during dependency install)
         if ".nodes.{}".format(module_name) in sys.modules:
             importlib.reload(sys.modules[".nodes.{}".format(module_name)])
 
@@ -109,10 +95,6 @@ for module_name in node_list:
 
     except Exception as e:
         logging.error(f"[GoddessLabs] ERROR loading node module '{module_name}'")
-        # Note on Windows: If ctypes is imported at the top level of folder_browser.py, and this is NOT Windows,
-        # it will still crash here, even with the try/except in the node file.
-        # However, your folder_browser.py handles it with the `try/except` around `import ctypes` and `if IS_WINDOWS:` checks,
-        # which is the correct way, so this should only fail if a required dependency for the rest of the node is truly missing.
         traceback.print_exc()
 
 WEB_DIRECTORY = "js"
