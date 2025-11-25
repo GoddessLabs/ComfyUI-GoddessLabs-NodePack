@@ -10,8 +10,8 @@ A collection of custom utility nodes for ComfyUI, engineered for **workflow stab
 ## 🚀 Custom Nodes
 
 *   [**❤️‍🔥📂 Folder Browser (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Seamless, stable OS-native folder browser using `wxPython`.
-*   [**❤️‍🔥💥 Destroy & Recreate (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Destroys & recreates nodes to clear their cache.
-*   [**❤️‍🔥💾 Node State Manager (Alpha)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Saves the node's state, and allows it to be reloaded.
+*   [**❤️‍🔥💥 Destroy & Recreate (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Destroys & recreates nodes clearing their cache.
+*   [**❤️‍🔥💾 Node State Manager (Alpha)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Saves the node's state, allowing it to be changed and reloaded.
 
 ---
 
@@ -123,4 +123,5 @@ Controls default settings for the node upon creation.
 ### `append_options.txt`
 
 A simple text file where you can list file extensions (e.g., `*.png`, `*.webp`) that appear in the "Append Extension" submenu.
+
 
