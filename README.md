@@ -1,4 +1,8 @@
-# ❤️‍🔥💊 GoddessLabs Toolset
+<<<<<< v2.2-release
+# ❤️‍🔥💊 GoddessLabs NodePack
+
+=======
+
 
 A collection of custom utility nodes for ComfyUI, engineered for **workflow stability, optimization, and quality-of-life enhancements**.
 
@@ -110,3 +114,11 @@ A crucial quality-of-life node for **saving, loading, and comparing widget setti
 | **Save State** | Connect the node's output to any node (e.g., Sampler, Checkpoint Loader). Click **"Save State"** (or the floppy disk 💾 icon) to capture the current values of the connected node's widgets. |
 | **Load State** | Click **"Load State"** to instantly restore the captured widget values, allowing for fast A/B testing or configuration switching. |
 | **Widget Support** | Works with most standard input types (e.g., numbers, strings, dropdowns). |
+## Custom Nodes
+### Utility
+* **Folder Browser ❤️‍🔥💊 GoddessLabs**: 
+    * Opens a native Windows folder picker.
+    * **NEW in V0.0.4:** Includes a `Reload Connected Node ⟳` button. 
+        * **Note:** This button is hidden by default. To enable it, right-click the node, select **Properties**, and set `show_reload_button` to `true`.
+
+        * **Function:** It forces downstream nodes (like the **JOV Video Queue**) to fully reload and refresh their file lists without restarting ComfyUI.
