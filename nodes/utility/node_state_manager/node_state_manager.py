@@ -8,7 +8,7 @@ class AnyType(str):
 
 any_type = AnyType("*")
 
-class GoddessLabsSaveState:
+class GoddessLabsNodeStateManager:
     """
     A utility node that stores widget states of connected downstream nodes.
     States are saved in the node's properties and managed via the frontend.
@@ -36,9 +36,9 @@ class GoddessLabsSaveState:
         return (any_input,)
 
 NODE_CLASS_MAPPINGS = {
-    "GoddessLabsSaveState": GoddessLabsSaveState,
+    "GoddessLabsNodeStateManager": GoddessLabsNodeStateManager,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsSaveState": "❤️‍🔥💾 Save State (Alpha)",
+    "GoddessLabsNodeStateManager": "❤️‍🔥💾 Node State Manager (Alpha)",
 }

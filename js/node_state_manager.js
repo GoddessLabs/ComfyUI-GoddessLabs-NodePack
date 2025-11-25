@@ -1,9 +1,9 @@
 import { app } from "/scripts/app.js";
 
 app.registerExtension({
-    name: "GoddessLabs.SaveState",
+    name: "GoddessLabs.NodeStateManager",
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeData.name === "GoddessLabsSaveState") {
+        if (nodeData.name === "GoddessLabsNodeStateManager") {
 
             const onNodeCreated = nodeType.prototype.onNodeCreated;
             nodeType.prototype.onNodeCreated = function () {

@@ -71,7 +71,7 @@ check_and_install_dependencies()
 node_list = [
     "utility.folder_browser.folder_browser",
     "utility.destroy_and_recreate.destroy_and_recreate",
-    "utility.save_state.save_state",
+    "utility.node_state_manager.node_state_manager",
 ]
 
 NODE_CLASS_MAPPINGS = {}
