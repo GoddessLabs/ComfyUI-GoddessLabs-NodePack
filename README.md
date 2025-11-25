@@ -9,9 +9,9 @@ A collection of custom utility nodes for ComfyUI, engineered for **workflow stab
 
 ## 🚀 Custom Nodes
 
-*   [**❤️‍🔥📂 Folder Browser (Beta)**](#folder-browser-beta): Seamless, stable OS-native folder selection using `wxPython`.
-*   [**❤️‍🔥💥 Destroy & Recreate (Beta)**](#destroy-recreate-beta): Utilizes a "Destroy & Recreate" strategy to force-reload connections and break the ComfyUI execution cache.
-*   [**❤️‍🔥💾 Node State Manager (Alpha)**](#node-state-manager-alpha): Save and restore widget configurations for any connected node (sampler, checkpoint, etc.).
+*   [**❤️‍🔥📂 Folder Browser (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Seamless, stable OS-native folder selection using `wxPython`.
+*   [**❤️‍🔥💥 Destroy & Recreate (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Utilizes a "Destroy & Recreate" strategy to force-reload connections and break the ComfyUI execution cache.
+*   [**❤️‍🔥💾 Node State Manager (Alpha)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Save and restore widget configurations for any connected node (sampler, checkpoint, etc.).
 
 ---
 
@@ -121,6 +121,7 @@ A crucial quality-of-life node for **saving, loading, and comparing widget setti
         * **Note:** This button is hidden by default. To enable it, right-click the node, select **Properties**, and set `show_reload_button` to `true`.
 
         * **Function:** It forces downstream nodes (like the **JOV Video Queue**) to fully reload and refresh their file lists without restarting ComfyUI.
+
 
 
 
