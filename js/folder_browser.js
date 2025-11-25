@@ -197,6 +197,18 @@ app.registerExtension({
                     .catch(err => console.error("[GoddessLabs] Error fetching append options:", err));
 
                 // --- VISUAL STYLING ---
+                // Apply immediately to prevent lag
+                if (!node.color) {
+                    node.color = "#633CCA";   // Goddess Purple
+                    node.bgcolor = "#633CCA";
+                }
+                node.shape = 1; // Box Shape
+
+                // Default Size (Larger for paths)
+                if (!node.size || node.size[0] < 400) {
+                    node.size = [400, 120];
+                }
+
                 let isRestoring = false;
                 const origConfigure = node.configure;
 
@@ -212,16 +224,6 @@ app.registerExtension({
                         removeReloadButton(this);
                     }
                 };
-
-                setTimeout(() => {
-                    if (!isRestoring) {
-                        if (!node.color) {
-                            node.color = "#633CCA";   // Goddess Purple
-                            node.bgcolor = "#633CCA";
-                        }
-                        node.shape = 1; // Box Shape
-                    }
-                }, 0);
 
                 const pathWidget = this.widgets.find(w => w.name === "path");
                 const appendWidget = this.widgets.find(w => w.name === "append");
@@ -292,6 +294,7 @@ app.registerExtension({
                     if (onDrawForeground) onDrawForeground.apply(this, arguments);
 
                     if (this.flags.collapsed) return;
+                    if (app.canvas.ds.scale < 0.55) return; // Hide if zoomed out
 
                     ctx.save();
 
@@ -311,6 +314,9 @@ app.registerExtension({
                 const onMouseDown = node.onMouseDown;
                 node.onMouseDown = function (e, pos, canvas) {
                     if (e.button === 0) { // Left click
+                        // Check zoom level first
+                        if (app.canvas.ds.scale < 0.55) return onMouseDown ? onMouseDown.apply(this, arguments) : undefined;
+
                         const x = this.size[0] - 20;
                         const y = -15;
 

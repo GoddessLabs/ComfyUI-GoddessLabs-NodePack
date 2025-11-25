@@ -1,5 +1,4 @@
 
-
 import server
 import asyncio
 from aiohttp import web
@@ -219,7 +218,7 @@ class GoddessLabsFolderSelector:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("folder_path",)
     FUNCTION = "return_path"
-    CATEGORY = "GoddessLabs❤️‍🔥💊"
+    CATEGORY = "GoddessLabs❤️‍🔥💊/Utility"
 
     def return_path(self, path, append):
         final_path = path + append
@@ -231,5 +230,5 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "GoddessLabsFolderSelector": "❤️‍🔥📂 Folder Browser",
+    "GoddessLabsFolderSelector": "❤️‍🔥📂 Folder Browser (Beta)",
 }

@@ -10,37 +10,40 @@ app.registerExtension({
                 if (onNodeCreated) onNodeCreated.apply(this, arguments);
                 const node = this;
 
-                // --- INITIALIZATION ---
-                if (!node.properties) node.properties = {};
-                if (!node.properties.saved_state) node.properties.saved_state = null;
-
-                // Internal state for flash animation
-                node._flash_info = { button: null, startTime: 0 };
-
-                // --- THEME ---
-                // Apply Goddess Labs Theme
-                setTimeout(() => {
-                    node.color = "#633CCA";
+                // --- VISUAL STYLING ---
+                // Apply immediately to prevent lag
+                if (!node.color) {
+                    node.color = "#633CCA";   // Goddess Purple
                     node.bgcolor = "#633CCA";
-                }, 0);
+                }
+                node.shape = 1; // Box Shape
+                node.size = [200, 70]; // Force initial size to prevent clipping
 
-                // --- SIZING FIX ---
-                // Override computeSize to ensure the node never shrinks below our button area
-                node.computeSize = function () {
-                    return [200, 60]; // Min width 200, Min height 60 (Header + 20px Button)
+                let isRestoring = false;
+                const origConfigure = node.configure;
+
+                node.configure = function (data) {
+                    isRestoring = true;
+                    if (origConfigure) {
+                        origConfigure.apply(this, arguments);
+                    }
                 };
-                node.size = node.computeSize();
+
+                node.computeSize = function () {
+                    return [200, 70]; // Min width 200, Min height 70 (Header + 20px Button + Padding)
+                };
 
                 // --- DRAWING (The View) ---
                 const onDrawForeground = node.onDrawForeground;
                 node.onDrawForeground = function (ctx) {
                     if (onDrawForeground) onDrawForeground.apply(this, arguments);
                     if (this.flags.collapsed) return;
+                    if (app.canvas.ds.scale < 0.55) return; // Hide if zoomed out
 
                     // Define Button Area
                     const margin = 10;
                     const buttonHeight = 20; // Standard LiteGraph height
-                    const y = 40; // Draw below the header
+                    const y = 38; // Draw below the header (adjusted to match standard nodes)
                     const width = this.size[0] - (margin * 2);
 
                     ctx.save();
@@ -98,13 +101,16 @@ app.registerExtension({
                 const onMouseDown = node.onMouseDown;
                 node.onMouseDown = function (e, pos, canvas) {
                     if (e.button === 0) { // Left Click
+                        // Check zoom level first
+                        if (app.canvas.ds.scale < 0.55) return onMouseDown ? onMouseDown.apply(this, arguments) : undefined;
+
                         const x = pos[0];
                         const y = pos[1];
 
                         // Define Button Area (Must match onDrawForeground)
                         const margin = 10;
                         const buttonHeight = 20; // Adjusted to 20px
-                        const buttonY = 40;
+                        const buttonY = 38; // Match onDrawForeground
                         const width = this.size[0] - (margin * 2);
 
                         // 1. Check if click is within the vertical band of the buttons

@@ -125,13 +125,13 @@ app.registerExtension({
                 node.size = [200, 60];
 
                 // --- VISUAL STYLING ---
-                setTimeout(() => {
-                    if (!node.color) {
-                        node.color = "#633CCA";   // Goddess Purple
-                        node.bgcolor = "#633CCA";
-                    }
-                    node.shape = 1; // Box Shape
-                }, 0);
+                // --- VISUAL STYLING ---
+                // Apply immediately to prevent lag
+                if (!node.color) {
+                    node.color = "#633CCA";   // Goddess Purple
+                    node.bgcolor = "#633CCA";
+                }
+                node.shape = 1; // Box Shape
 
                 // --- DEFAULT PROPERTIES ---
                 if (this.properties["show_reload_button"] === undefined) this.properties["show_reload_button"] = true;
@@ -185,6 +185,7 @@ app.registerExtension({
                     if (onDrawForeground) onDrawForeground.apply(this, arguments);
 
                     if (this.flags.collapsed) return;
+                    if (app.canvas.ds.scale < 0.55) return; // Hide if zoomed out
 
                     ctx.save();
 
@@ -203,6 +204,9 @@ app.registerExtension({
                 const onMouseDown = node.onMouseDown;
                 node.onMouseDown = function (e, pos, canvas) {
                     if (e.button === 0) { // Left click
+                        // Check zoom level first
+                        if (app.canvas.ds.scale < 0.55) return onMouseDown ? onMouseDown.apply(this, arguments) : undefined;
+
                         const x = this.size[0] - 20;
                         const y = -15;
 
