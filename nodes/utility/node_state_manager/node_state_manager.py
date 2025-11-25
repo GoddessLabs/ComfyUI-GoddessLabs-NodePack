@@ -1,4 +1,3 @@
-
 import server
 
 class AnyType(str):
