@@ -1,4 +1,4 @@
-<<<<<< v2.2-release
+<<<<<<< v2.2-release
 # ❤️‍🔥💊 GoddessLabs NodePack
 
 =======
@@ -122,3 +122,4 @@ A crucial quality-of-life node for **saving, loading, and comparing widget setti
         * **Note:** This button is hidden by default. To enable it, right-click the node, select **Properties**, and set `show_reload_button` to `true`.
 
         * **Function:** It forces downstream nodes (like the **JOV Video Queue**) to fully reload and refresh their file lists without restarting ComfyUI.
+
