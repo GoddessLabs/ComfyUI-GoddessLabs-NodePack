@@ -1,6 +1,6 @@
 # ❤️‍🔥💊 GoddessLabs NodePack v0.2.2-beta-release
 
-=======
+---
 
 
 A collection of custom utility nodes for ComfyUI, engineered for **workflow stability, optimization, and quality-of-life enhancements**.
@@ -9,9 +9,9 @@ A collection of custom utility nodes for ComfyUI, engineered for **workflow stab
 
 ## 🚀 Custom Nodes
 
-*   [**❤️‍🔥📂 Folder Browser (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Seamless, stable OS-native folder selection using `wxPython`.
-*   [**❤️‍🔥💥 Destroy & Recreate (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Utilizes a "Destroy & Recreate" strategy to force-reload connections and break the ComfyUI execution cache.
-*   [**❤️‍🔥💾 Node State Manager (Alpha)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Save and restore widget configurations for any connected node (sampler, checkpoint, etc.).
+*   [**❤️‍🔥📂 Folder Browser (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Seamless, stable OS-native folder browser using `wxPython`.
+*   [**❤️‍🔥💥 Destroy & Recreate (Beta)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Destroys & recreates nodes to clear their cache.
+*   [**❤️‍🔥💾 Node State Manager (Alpha)**](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack/blob/main/README.md#node-state-manager-alpha): Saves the node's state, and allows it to be reloaded.
 
 ---
 
@@ -19,13 +19,21 @@ A collection of custom utility nodes for ComfyUI, engineered for **workflow stab
 
 This node pack requires `wxPython` for the native folder dialog functionality.
 
-### Automatic Installation (Recommended)
+### Simple Installation (Zip File) 🥇 (Recommended)
+
+1.  Download the latest release ZIP file from the repository.
+2.  Navigate to your ComfyUI `custom_nodes` directory.
+3.  **Extract the contents of the ZIP file directly into the `custom_nodes` folder.**
+4.  Ensure the resulting folder is named `ComfyUI-GoddessLabs-NodePack`.
+5.  The necessary dependencies, including `wxPython`, will be automatically installed when ComfyUI starts, as configured in the `__init__.py` script.
+
+### Automatic Installation (Git Clone)
 
 1.  Navigate to your ComfyUI `custom_nodes` directory.
 2.  Clone this repository:
 
     ```bash
-    git clone https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack.git
+    git clone [https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack.git](https://github.com/GoddessLabs/ComfyUI-GoddessLabs-NodePack.git)
     ```
 
 3.  The necessary dependencies, including `wxPython`, will be automatically installed when ComfyUI starts, as configured in the `__init__.py` script.
@@ -34,7 +42,7 @@ This node pack requires `wxPython` for the native folder dialog functionality.
 
 If automatic installation fails, or for portable ComfyUI versions:
 
-1.  Clone the repository as above.
+1.  Clone the repository as above (or download the zip).
 2.  Install dependencies manually using your local Python executable:
 
     ```bash
@@ -44,26 +52,6 @@ If automatic installation fails, or for portable ComfyUI versions:
     # For portable versions (adjust path as needed)
     ..\..\..\python_embeded\python.exe -m pip install -r requirements.txt
     ```
-
----
-
-## ⚙️ Configuration
-
-Customize the behavior of the **Folder Browser** node by editing the configuration files located in `nodes/utility/folder_browser/`.
-
-### `config.txt`
-
-Controls default settings for the node upon creation.
-
-| Setting | Values | Description |
-| :--- | :--- | :--- |
-| `default_path` | (path string) | Set the starting folder for the native dialog. Leave empty to default to the ComfyUI `input` directory. |
-| `auto_reload_on_change` | `true`, `false` | Enable or disable the feature that automatically reloads connected nodes when the path changes. |
-| `show_reload_button` | `true`, `false` | Show or hide the explicit "Reload Connected Node" button. |
-
-### `append_options.txt`
-
-A simple text file where you can list file extensions (e.g., `*.png`, `*.webp`) that appear in the "Append Extension" submenu.
 
 ---
 
@@ -113,15 +101,26 @@ A crucial quality-of-life node for **saving, loading, and comparing widget setti
 | **Save State** | Connect the node's output to any node (e.g., Sampler, Checkpoint Loader). Click **"Save State"** (or the floppy disk 💾 icon) to capture the current values of the connected node's widgets. |
 | **Load State** | Click **"Load State"** to instantly restore the captured widget values, allowing for fast A/B testing or configuration switching. |
 | **Widget Support** | Works with most standard input types (e.g., numbers, strings, dropdowns). |
-## Custom Nodes
-### Utility
-* **Folder Browser ❤️‍🔥💊 GoddessLabs**: 
-    * Opens a native Windows folder picker.
-    * **NEW in V0.0.4:** Includes a `Reload Connected Node ⟳` button. 
-        * **Note:** This button is hidden by default. To enable it, right-click the node, select **Properties**, and set `show_reload_button` to `true`.
-
-        * **Function:** It forces downstream nodes (like the **JOV Video Queue**) to fully reload and refresh their file lists without restarting ComfyUI.
 
 
 
+---
+
+## ⚙️ Configuration
+
+Customize the behavior of the **Folder Browser** node by editing the configuration files located in `nodes/utility/folder_browser/`.
+
+### `config.txt`
+
+Controls default settings for the node upon creation.
+
+| Setting | Values | Description |
+| :--- | :--- | :--- |
+| `default_path` | (path string) | Set the starting folder for the native dialog. Leave empty to default to the ComfyUI `input` directory. |
+| `auto_reload_on_change` | `true`, `false` | Enable or disable the feature that automatically reloads connected nodes when the path changes. |
+| `show_reload_button` | `true`, `false` | Show or hide the explicit "Reload Connected Node" button. |
+
+### `append_options.txt`
+
+A simple text file where you can list file extensions (e.g., `*.png`, `*.webp`) that appear in the "Append Extension" submenu.
 
